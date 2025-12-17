@@ -1,4 +1,4 @@
-package com.kb.orders.entity;
+package com.kb.users.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

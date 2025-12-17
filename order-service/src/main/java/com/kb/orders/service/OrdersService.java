@@ -5,6 +5,7 @@ import com.kb.common.dto.orders.OrdersResponseDto;
 import com.kb.orders.exceptions.OrdersException;
 import com.kb.orders.repository.OrdersRepository;
 import com.kb.orders.repository.mapper.EntityMapper;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class OrdersService {
                 .orElseThrow(() -> new OrdersException("Missing order with id: " + id));
     }
 
+    @Transactional
     public OrdersResponseDto saveOrder(final OrdersDto order) {
         log.info("Saving order: {}", order);
         return Optional
@@ -46,6 +48,7 @@ public class OrdersService {
                 .orElseThrow(() -> new OrdersException("Unable to save order: " + order));
     }
 
+    @Transactional
     public OrdersResponseDto updateOrderById(final OrdersDto order, final int id) {
         log.info("Updating order with id: {}", id);
         return ordersRepository
@@ -56,6 +59,7 @@ public class OrdersService {
                 .orElseThrow(() -> new OrdersException("Failed to update order with id: " + id));
     }
 
+    @Transactional
     public void deleteOrderById(final int id) {
         log.info("Deleting order with id: {}", id);
         ordersRepository

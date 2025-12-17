@@ -5,6 +5,7 @@ import com.kb.common.dto.users.UsersResponseDto;
 import com.kb.users.exceptions.UsersException;
 import com.kb.users.repository.UsersRepository;
 import com.kb.users.repository.mapper.EntityMapper;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,7 @@ public class UsersService {
                 .orElseThrow(() -> new UsersException("Missing user with id: " + id));
     }
 
+    @Transactional
     public UsersResponseDto saveUser(final UsersDto user) {
         log.info("Saving user: {}", user);
         return Optional
@@ -46,6 +48,7 @@ public class UsersService {
                 .orElseThrow(() -> new UsersException("Unable to save user: " + user));
     }
 
+    @Transactional
     public UsersResponseDto updateUserById(final UsersDto user, final int id) {
         log.info("Updating user with id: {}", id);
         return usersRepository
@@ -56,6 +59,7 @@ public class UsersService {
                 .orElseThrow(() -> new UsersException("Failed to update user with id: " + id));
     }
 
+    @Transactional
     public void deleteUserById(final int id) {
         log.info("Deleting user with id: {}", id);
         usersRepository

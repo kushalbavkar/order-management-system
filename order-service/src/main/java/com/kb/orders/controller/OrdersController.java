@@ -15,12 +15,12 @@ public interface OrdersController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrdersResponseDto> getOrderById(@PathVariable("id") Integer id);
 
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrdersResponseDto> saveOrder(@RequestBody OrdersDto order);
 
-    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<OrdersResponseDto> updateOrder(@RequestBody OrdersDto order, @PathVariable("id") Integer id);
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> deleteOrder(@PathVariable("id") Integer id);
 }

@@ -5,6 +5,7 @@ import com.kb.common.dto.products.ProductsResponseDto;
 import com.kb.products.exceptions.ProductsException;
 import com.kb.products.repository.ProductsRepository;
 import com.kb.products.repository.mapper.EntityMapper;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -30,34 +31,37 @@ public class ProductsService {
     }
 
     public ProductsResponseDto getProductById(final int id) {
-        log.info("Getting product by id: {}", id);
+        log.info("Getting productName by id: {}", id);
         return productsRepository
                 .findById(id)
                 .map(EntityMapper::entityToDto)
-                .orElseThrow(() -> new ProductsException("Missing product with id: " + id));
+                .orElseThrow(() -> new ProductsException("Missing productName with id: " + id));
     }
 
+    @Transactional
     public ProductsResponseDto saveProduct(final ProductsDto product) {
-        log.info("Saving product: {}", product);
+        log.info("Saving productName: {}", product);
         return Optional
                 .of(EntityMapper.dtoToEntity(product))
                 .map(productsRepository::save)
                 .map(EntityMapper::entityToDto)
-                .orElseThrow(() -> new ProductsException("Unable to save product: " + product));
+                .orElseThrow(() -> new ProductsException("Unable to save productName: " + product));
     }
 
+    @Transactional
     public ProductsResponseDto updateProductById(final ProductsDto product, final int id) {
-        log.info("Updating product with id: {}", id);
+        log.info("Updating productName with id: {}", id);
         return productsRepository
                 .findById(id)
                 .map(entity -> EntityMapper.updateEntity(entity, product))
                 .map(productsRepository::save)
                 .map(EntityMapper::entityToDto)
-                .orElseThrow(() -> new ProductsException("Failed to update product with id: " + id));
+                .orElseThrow(() -> new ProductsException("Failed to update productName with id: " + id));
     }
 
+    @Transactional
     public void deleteProductById(final int id) {
-        log.info("Deleting product with id: {}", id);
+        log.info("Deleting productName with id: {}", id);
         productsRepository
                 .deleteById(id);
     }

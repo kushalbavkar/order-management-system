@@ -15,12 +15,12 @@ public interface UsersController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UsersResponseDto> getUserById(@PathVariable("id") Integer id);
 
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UsersResponseDto> saveUser(@RequestBody UsersDto user);
 
-    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<UsersResponseDto> updateUser(@RequestBody UsersDto user, @PathVariable("id") Integer id);
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> deleteUser(@PathVariable("id") Integer id);
 }

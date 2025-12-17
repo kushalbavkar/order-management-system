@@ -9,10 +9,11 @@
 	<name>order-management-system</name>
 	<description>Sample app to demonstrate multi module project setup</description>
 	<modules>
+		<module>commons</module>
 		<module>order-service</module>
 		<module>product-service</module>
-        <module>commons</module>
-    </modules>
+		<module>user-service</module>
+	</modules>
 	<properties>
 		<java.version>21</java.version>
 		<spring.boot.version>3.4.11</spring.boot.version>

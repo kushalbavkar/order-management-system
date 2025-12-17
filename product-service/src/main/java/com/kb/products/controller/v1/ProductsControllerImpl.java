@@ -27,7 +27,7 @@ public class ProductsControllerImpl implements ProductsController {
 
     @Override
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductsResponseDto> getProductById(@PathVariable Integer id) {
+    public ResponseEntity<ProductsResponseDto> getProductById(@PathVariable("id") Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(productsService.getProductById(id));
     }
 
@@ -39,13 +39,13 @@ public class ProductsControllerImpl implements ProductsController {
 
     @Override
     @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductsResponseDto> updateProduct(@RequestBody ProductsDto product, @PathVariable Integer id) {
+    public ResponseEntity<ProductsResponseDto> updateProduct(@RequestBody ProductsDto product, @PathVariable("id") Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(productsService.updateProductById(product, id));
     }
 
     @Override
     @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteProduct(Integer id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Integer id) {
         productsService.deleteProductById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

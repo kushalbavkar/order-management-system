@@ -34,12 +34,14 @@ public class ProductsControllerImpl implements ProductsController {
     @Override
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductsResponseDto> saveProduct(@RequestBody ProductsDto product) {
+        product.validate();
         return ResponseEntity.status(HttpStatus.CREATED).body(productsService.saveProduct(product));
     }
 
     @Override
     @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductsResponseDto> updateProduct(@RequestBody ProductsDto product, @PathVariable("id") Integer id) {
+        product.validate();
         return ResponseEntity.status(HttpStatus.OK).body(productsService.updateProductById(product, id));
     }
 

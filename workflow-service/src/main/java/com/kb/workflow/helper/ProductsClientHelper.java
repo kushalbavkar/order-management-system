@@ -3,6 +3,7 @@ package com.kb.workflow.helper;
 import com.kb.common.dto.products.ProductsResponseDto;
 import com.kb.common.dto.workflow.CreateOrderDto;
 import com.kb.workflow.client.ProductServiceClient;
+import com.kb.workflow.exceptions.DownstreamException;
 import com.kb.workflow.exceptions.WorkflowException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +20,27 @@ public class ProductsClientHelper {
     }
 
     public ProductsResponseDto getProduct(final CreateOrderDto order) {
-        final ResponseEntity<List<ProductsResponseDto>> response = productServiceClient.getProducts();
+        final List<ProductsResponseDto> products;
 
-        if (response.getStatusCode() != HttpStatus.OK)
-            throw new WorkflowException("Failed to get productName list");
+        try {
+            final ResponseEntity<List<ProductsResponseDto>> response = productServiceClient.getProducts();
+            products = response.getBody();
+        } catch (DownstreamException ex) {
+            throw new WorkflowException("Failed to get product list, Details: " + ex.getMessage());
+        }
 
-        final ProductsResponseDto product = filterProduct(response.getBody(), order);
+        return filterProduct(products, order);
+    }
+
+    private static ProductsResponseDto filterProduct(final List<ProductsResponseDto> products, final CreateOrderDto order) {
+        final ProductsResponseDto product = products.stream()
+                .filter(p -> p.name().equals(order.productName()))
+                .findFirst()
+                .orElseThrow(() -> new WorkflowException("Invalid productName [" + order.productName() + "] specified"));
 
         if (!product.inStock())
             throw new WorkflowException("Product [" + order.productName() + "] is out of stock");
 
         return product;
-    }
-
-    private static ProductsResponseDto filterProduct(final List<ProductsResponseDto> products, final CreateOrderDto order) {
-        return products.stream()
-                .filter(product -> product.name().equals(order.productName()))
-                .findFirst()
-                .orElseThrow(() -> new WorkflowException("Invalid productName [" + order.productName() + "] specified"));
     }
 }

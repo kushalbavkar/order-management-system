@@ -3,8 +3,8 @@ package com.kb.workflow.helper;
 import com.kb.common.dto.users.UsersResponseDto;
 import com.kb.common.dto.workflow.CreateOrderDto;
 import com.kb.workflow.client.UserServiceClient;
+import com.kb.workflow.exceptions.DownstreamException;
 import com.kb.workflow.exceptions.WorkflowException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -19,12 +19,16 @@ public class UsersClientHelper {
     }
 
     public UsersResponseDto getUser(final CreateOrderDto order) {
-        final ResponseEntity<List<UsersResponseDto>> response = userServiceClient.getUsers();
+        final List<UsersResponseDto> users;
 
-        if (response.getStatusCode() != HttpStatus.OK)
-            throw new WorkflowException("Failed to get user list");
+        try {
+            final ResponseEntity<List<UsersResponseDto>> response = userServiceClient.getUsers();
+            users = response.getBody();
+        } catch (DownstreamException ex) {
+            throw new WorkflowException("Failed to get user list, Details: " + ex.getMessage());
+        }
 
-        return filterUser(response.getBody(), order);
+        return filterUser(users, order);
     }
 
     private static UsersResponseDto filterUser(final List<UsersResponseDto> users, final CreateOrderDto order) {

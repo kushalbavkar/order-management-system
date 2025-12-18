@@ -20,12 +20,14 @@ public class WorkflowControllerImpl implements WorkflowController {
     @Override
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrdersResponseDto> createOrder(final CreateOrderDto order) {
+        order.validate();
         return ResponseEntity.status(HttpStatus.CREATED).body(workflowService.createOrder(order));
     }
 
     @Override
     @PutMapping(value = "/{id}/change-status", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrdersResponseDto> changeOrderStatus(@RequestBody StatusDto order, @PathVariable("id") Integer id) {
+        order.validate();
         return ResponseEntity.status(HttpStatus.OK).body(workflowService.changeOrderStatus(order, id));
     }
 }

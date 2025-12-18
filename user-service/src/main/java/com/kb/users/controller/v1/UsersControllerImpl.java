@@ -33,12 +33,14 @@ public class UsersControllerImpl implements UsersController {
     @Override
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersResponseDto> saveUser(@RequestBody UsersDto user) {
+        user.validate();
         return ResponseEntity.status(HttpStatus.CREATED).body(usersService.saveUser(user));
     }
 
     @Override
     @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UsersResponseDto> updateUser(@RequestBody UsersDto user, @PathVariable("id") Integer id) {
+        user.validate();
         return ResponseEntity.status(HttpStatus.OK).body(usersService.updateUserById(user, id));
     }
 

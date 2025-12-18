@@ -33,12 +33,14 @@ public class OrdersControllerImpl implements OrdersController {
     @Override
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrdersResponseDto> saveOrder(@RequestBody OrdersDto order) {
+        order.validate();
         return ResponseEntity.status(HttpStatus.CREATED).body(ordersService.saveOrder(order));
     }
 
     @Override
     @PutMapping(value = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrdersResponseDto> updateOrder(@RequestBody OrdersDto order, @PathVariable("id") Integer id) {
+        order.validate();
         return ResponseEntity.status(HttpStatus.OK).body(ordersService.updateOrderById(order, id));
     }
 

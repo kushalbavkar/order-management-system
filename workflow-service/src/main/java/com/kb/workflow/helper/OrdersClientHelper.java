@@ -5,10 +5,10 @@ import com.kb.common.dto.orders.OrdersDto;
 import com.kb.common.dto.orders.OrdersResponseDto;
 import com.kb.common.dto.workflow.StatusDto;
 import com.kb.workflow.client.OrderServiceClient;
+import com.kb.workflow.exceptions.DownstreamException;
 import com.kb.workflow.exceptions.WorkflowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -22,30 +22,30 @@ public class OrdersClientHelper {
     }
 
     public OrdersResponseDto placeOrder(final OrdersDto order) {
-        final ResponseEntity<OrdersResponseDto> response = orderServiceClient.saveOrder(order);
-
-        if (response.getStatusCode() != HttpStatus.CREATED)
-            throw new WorkflowException("Failed to place order");
-
-        return response.getBody();
+        try {
+            final ResponseEntity<OrdersResponseDto> response = orderServiceClient.saveOrder(order);
+            return response.getBody();
+        } catch (DownstreamException ex) {
+            throw new WorkflowException("Failed to place order, Details: " + ex.getMessage());
+        }
     }
 
     public OrdersResponseDto getOrder(final Integer id) {
-        final ResponseEntity<OrdersResponseDto> response = orderServiceClient.getOrderById(id);
-
-        if (response.getStatusCode() != HttpStatus.OK)
-            throw new WorkflowException("Failed to get order details for Order id: " + id);
-
-        return response.getBody();
+        try {
+            final ResponseEntity<OrdersResponseDto> response = orderServiceClient.getOrderById(id);
+            return response.getBody();
+        } catch (DownstreamException ex) {
+            throw new WorkflowException("Failed to get order details for Order id: " + id + ", Details: " + ex.getMessage());
+        }
     }
 
     public OrdersResponseDto updateOrderStatus(final Integer id, final OrdersDto order) {
-        final ResponseEntity<OrdersResponseDto> response = orderServiceClient.updateOrder(order, id);
-
-        if (response.getStatusCode() != HttpStatus.OK)
-            throw new WorkflowException("Failed to get order details for Order id: " + id);
-
-        return response.getBody();
+        try {
+            final ResponseEntity<OrdersResponseDto> response = orderServiceClient.updateOrder(order, id);
+            return response.getBody();
+        } catch (DownstreamException ex) {
+            throw new WorkflowException("Failed to get order details for Order id: " + id + ", Details: " + ex.getMessage());
+        }
     }
 
     public static OrderStatus manageOrderStatus(final StatusDto status, final OrdersResponseDto originalOrder) {
@@ -54,7 +54,7 @@ public class OrdersClientHelper {
 
         log.info("Current Status: {}, New Status: {}", currentStatus.name(), newStatus.name());
 
-        if (currentStatus == OrderStatus.DELIVERED || currentStatus == OrderStatus.CANCELLED) {
+        if ((currentStatus != newStatus) && (currentStatus == OrderStatus.DELIVERED || currentStatus == OrderStatus.CANCELLED)) {
             log.error("Order status cannot be changed to [{}] once DELIVERED or CANCELLED", newStatus.name());
             throw new WorkflowException("Failed to change order status to [" + newStatus.name() + "], Current status: [" + currentStatus.name() + "]");
         }

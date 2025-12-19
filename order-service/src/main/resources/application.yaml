@@ -6,6 +6,21 @@ spring:
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
 
 server:
   port: 8083
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0   # 100% for local/dev
+    propagation:
+      produce: w3c
+      consume: w3c
+#
+#  otlp:
+#    tracing:
+#      endpoint: "http://otel-collector.istio-system:4317"   # later Istio OTEL collector

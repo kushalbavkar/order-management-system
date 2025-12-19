@@ -12,6 +12,7 @@ import com.kb.workflow.helper.ProductsClientHelper;
 import com.kb.workflow.helper.UsersClientHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +24,10 @@ public class WorkflowService {
     private final UsersClientHelper usersClientHelper;
 
     public OrdersResponseDto createOrder(final CreateOrderDto order) {
+        log.info("Current traceId before Feign call: {}", MDC.get("traceId"));
+
         final UsersResponseDto user = usersClientHelper.getUser(order);
+
         final ProductsResponseDto product = productsClientHelper.getProduct(order);
 
         final OrdersDto orderObj = new OrdersDto(user.id(), product.id(), order.quantity(), OrderStatus.CREATED);

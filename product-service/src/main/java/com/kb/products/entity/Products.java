@@ -3,6 +3,7 @@ package com.kb.products.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class Products {
     private String name;
 
     @Column(name = "price")
-    private Long price;
+    private BigDecimal price;
 
     @Column(name = "in_stock")
     private Boolean inStock;

@@ -3,12 +3,13 @@ package com.kb.common.dto.products;
 import com.kb.common.dto.MandatoryFieldsValidator;
 import com.kb.common.exception.ValidationException;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public record ProductsDto(
         String name,
-        Long price,
+        BigDecimal price,
         Boolean inStock
 ) implements MandatoryFieldsValidator {
 

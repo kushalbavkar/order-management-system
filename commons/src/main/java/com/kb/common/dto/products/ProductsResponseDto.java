@@ -1,8 +1,10 @@
 package com.kb.common.dto.products;
 
+import java.math.BigDecimal;
+
 public record ProductsResponseDto(
     Integer id,
     String name,
-    Long price,
+    BigDecimal price,
     Boolean inStock
 ){}

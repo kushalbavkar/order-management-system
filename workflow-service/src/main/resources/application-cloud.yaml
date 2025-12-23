@@ -2,3 +2,4 @@ management:
   otlp:
     tracing:
       endpoint: ${MANAGEMENT_TRACING_ENDPOINT}
+      transport: GRPC

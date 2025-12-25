@@ -2,4 +2,11 @@ management:
   otlp:
     tracing:
       endpoint: ${MANAGEMENT_TRACING_ENDPOINT}
-      transport: GRPC
+      transport: HTTP
+
+otel:
+  resource:
+    attributes:
+      service.name: ${spring.application.name}
+      service.namespace: ${SERVICE_NAMESPACE}
+      deployment.environment: dev
